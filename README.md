@@ -11,9 +11,10 @@ I also used a build environment based on DOS-era tools.
 
 This time around, I am using a stock Cuttle Cart 3, which can be used without mods on the KC system to load the software.
 
-The following tools are required to build the cartridge image:
+Binaries can be found in the bin directory
 
-	cc65.exe and ld65.exe, from the cc65 distribute, found here:  http://cc65.github.io/cc65/
+The following tools are required to build the cartridge image:
+	cc65.exe and ld65.exe, from the cc65 distribution, found here:  http://cc65.github.io/cc65/
 	as1600.exe and bin2rom, from the jzintv distribution, found here: http://spatula-city.org/~im14u2c/intv/
 	gcc, to build a simple C utility (glue.exe) to merge the images.
 
