@@ -14,10 +14,10 @@ This time around, I am using a stock Cuttle Cart 3, which can be used without mo
 Binaries can be found in the bin directory
 
 The following tools are required to build the cartridge image:
-	cc65.exe and ld65.exe, from the cc65 distribution, found here:  http://cc65.github.io/cc65/
-	as1600.exe and bin2rom, from the jzintv distribution, found here: http://spatula-city.org/~im14u2c/intv/
-	gcc, to build a simple C utility (glue.exe) to merge the images.
+- cc65.exe and ld65.exe, from the cc65 distribution, found here:  http://cc65.github.io/cc65/
+- as1600.exe and bin2rom, from the jzintv distribution, found here: http://spatula-city.org/~im14u2c/intv/
+- gcc, to build a simple C utility (glue.exe) to merge the images.
 
 Status:
-	Currently generates the 2003 image, works but not pretty.  
-	Also, the code is not well-documented at this time.
+- Currently generates the 2003 image, works but not pretty.  
+- Also, the code is not well-documented at this time.
