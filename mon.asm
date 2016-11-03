@@ -5,6 +5,13 @@
     .endrep
 .endmacro
 
+	 .exportzp LOC0, LOC1, KSWL, CSWL
+	 .export   COUT, RESET
+	 
+	 .import   CRLFOUT, FPINIT
+	 
+	 .segment "MONITOR"
+	 
 ;***************************
 ;*                         *
 ;*        APPLE II         *
@@ -105,7 +112,7 @@ PADDL0   =   $C064
 PTRIG    =   $C070
 BASIC    =   $E000
 BASIC2   =   $E003
-         .ORG   $F800      ;ROM START ADDRESS
+;         .ORG   $F800      ;ROM START ADDRESS
 PLOT:    LSR              ;Y-COORD/2
          PHP              ;SAVE LSB IN CARRY
          JSR   GBASCALC   ;CALC BASE ADR IN GBASL,H
@@ -853,8 +860,12 @@ ADDINP:  STA   IN,X       ;ADD TO INPUT BUF
          CMP   #$8D
          BNE   NOTCR
          JSR   CLREOL     ;CLR TO EOL IF CR
-CROUT:   LDA   #$8D
-         BNE   COUT
+         
+;CROUT:   LDA   #$8D
+;         BNE   COUT
+CROUT:   JSR   CRLFOUT	  ; ***PATCH HERE***
+         RTS		  ; ***PATCH HERE***	
+         
 PRA1:    LDY   A1H        ;PRINT CR,A1 IN HEX
          LDX   A1L
 PRYX2:   JSR   CROUT
@@ -994,10 +1005,10 @@ OUTPRT:  LDX   #CSWL
 IOPRT:   LDA   A2L        ;SET RAM IN/OUT VECTORS
          AND   #$0F
          BEQ   IOPRT1
-         ORA   #IOADR/256
+         ORA   #>IOADR
          LDY   #$00
          BEQ   IOPRT2
-IOPRT1:  LDA   #COUT1/256
+IOPRT1:  LDA   #>COUT1
 IOPRT2:  STY   LOC0,X
          STA   LOC1,X
          RTS
@@ -1084,7 +1095,10 @@ SAV1:    STX   XREG
 RESET:   JSR   SETNORM    ;SET SCREEN MODE
          JSR   INIT       ;  AND INIT KBD/SCREEN
          JSR   SETVID     ;  AS I/O DEV'S
-         JSR   SETKBD
+         
+;         JSR   SETKBD
+	 JSR   FPINIT	  ; *** PATCH HERE ***
+	 
 MON:     CLD              ;MUST SET HEX MODE!
          JSR   BELL
 MONZ:    LDA   #$AA       ;'*' PROMPT FOR MON
@@ -1131,7 +1145,7 @@ NXTCHR:  LDA   IN,Y       ;GET CHAR
          CMP   #$FA
          BCS   DIG
          RTS
-TOSUB:   LDA   #GO/256    ;PUSH HIGH-ORDER
+TOSUB:   LDA   #>GO       ;PUSH HIGH-ORDER
          PHA              ;  SUBR ADR ON STK
          LDA   SUBTBL,Y   ;PUSH LOW-ORDER
          PHA              ;  SUBR ADR ON STK
@@ -1188,7 +1202,7 @@ SUBTBL:  .byte   <BASCONT-1
          .byte   <NMI        ;NMI VECTOR
          .byte   NMI/256
          .byte   <RESET      ;RESET VECTOR
-         .byte   RESET/256
+         .byte   >RESET
          .byte   <IRQ        ;IRQ VECTOR
-         .byte   IRQ/256
+         .byte   >IRQ
 XQTNZ    =   $3C
